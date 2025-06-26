@@ -73,12 +73,11 @@ claude mcp add redmine "redmine-mcp" \
 
 為避免與其他專案的環境變數衝突，redmine-mcp 使用專屬前綴：
 
-- **專屬變數**（優先）：
+- **專屬變數**：
   - `REDMINE_MCP_LOG_LEVEL`: 日誌級別 (DEBUG, INFO, WARNING, ERROR, CRITICAL)
   - `REDMINE_MCP_TIMEOUT`: 請求超時時間（秒）
 
 - **向後相容**（備用）：
-  - `LOG_LEVEL`: 如果未設定 REDMINE_MCP_LOG_LEVEL 時使用
   - `REDMINE_TIMEOUT`: 如果未設定 REDMINE_MCP_TIMEOUT 時使用
 
 - **必要變數**：

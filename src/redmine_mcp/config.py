@@ -22,10 +22,8 @@ class RedmineConfig:
         # 可選配置 - 使用專屬前綴避免與其他專案環境變數衝突
         self.redmine_timeout = int(os.getenv("REDMINE_MCP_TIMEOUT") or os.getenv("REDMINE_TIMEOUT") or "30")
         
-        # 優先使用專屬環境變數，如果沒有則使用通用環境變數，最後使用預設值
-        mcp_log_level = os.getenv("REDMINE_MCP_LOG_LEVEL")
-        fallback_log_level = os.getenv("LOG_LEVEL")
-        self.log_level = (mcp_log_level or fallback_log_level or "INFO").upper()
+        # 使用專屬環境變數，避免與其他專案衝突
+        self.log_level = os.getenv("REDMINE_MCP_LOG_LEVEL", "INFO").upper()
         self.debug_mode = self.log_level == "DEBUG"
         
         self._validate_config()
