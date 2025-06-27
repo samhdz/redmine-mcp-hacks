@@ -212,8 +212,8 @@ claude mcp add redmine "redmine-mcp" \
 ### 4. Verify Updated Installation
 
 ```bash
-# Test MCP connection
-claude mcp test redmine
+# Verify MCP registration
+claude mcp list
 
 # Or test directly
 uv run python -m redmine_mcp.server --help
