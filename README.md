@@ -215,6 +215,9 @@ claude mcp add redmine "redmine-mcp" \
 # Verify MCP registration
 claude mcp list
 
+# Or check in Claude Code using slash command
+# /mcp
+
 # Or test directly
 uv run python -m redmine_mcp.server --help
 ```
