@@ -62,9 +62,33 @@ Edit the `.env` file and set the following environment variables:
 ```env
 REDMINE_DOMAIN=https://your-redmine-domain.com
 REDMINE_API_KEY=your_api_key_here
+
+# Project-specific variables (avoid conflicts with other projects)
+REDMINE_MCP_LOG_LEVEL=INFO
+REDMINE_MCP_TIMEOUT=30
+
+# Backward compatibility variables (fallback)
 REDMINE_TIMEOUT=30
-DEBUG_MODE=false
+LOG_LEVEL=info
 ```
+
+#### Environment Variables Reference
+
+| Variable | Description | Default | Example |
+|----------|-------------|---------|---------|
+| `REDMINE_DOMAIN` | Redmine server URL | *Required* | `https://redmine.example.com` |
+| `REDMINE_API_KEY` | Your Redmine API key | *Required* | `abc123...` |
+| `REDMINE_MCP_LOG_LEVEL` | Log level for this MCP server | `INFO` | `DEBUG`, `INFO`, `WARNING`, `ERROR` |
+| `REDMINE_MCP_TIMEOUT` | Request timeout (seconds) | `30` | `60` |
+| `LOG_LEVEL` | Legacy log level (backward compatibility) | - | `debug`, `info` |
+| `REDMINE_TIMEOUT` | Legacy timeout (backward compatibility) | - | `30` |
+
+**Log Level Priority:**
+1. `REDMINE_MCP_LOG_LEVEL` (highest priority - project-specific)
+2. `LOG_LEVEL` (backward compatibility)
+3. `INFO` (default if neither is set)
+
+> **Note**: The system automatically handles case conversion and ensures FastMCP compatibility.
 
 ### 4. Redmine API Setup
 
@@ -141,6 +165,64 @@ uv run python -m redmine_mcp.server
 # Test Claude Code integration
 uv run python tests/scripts/claude_integration.py
 ```
+
+## 🔄 Updating/Reinstalling MCP
+
+If you need to update to the latest version of the MCP server or reinstall it:
+
+### 1. Remove Previous Installation
+
+```bash
+# Remove from Claude Code
+claude mcp remove redmine
+
+# Uninstall the package (if installed with uv tool)
+uv tool uninstall redmine-mcp
+
+# Or if installed with pip
+pip uninstall redmine-mcp
+```
+
+### 2. Install Latest Version
+
+```bash
+# Navigate to project directory
+cd /path/to/redmine-mcp
+
+# Pull latest changes (if from git)
+git pull origin main
+
+# Install latest version
+uv tool install .
+
+# Or using pip
+pip install .
+```
+
+### 3. Re-register with Claude Code
+
+```bash
+claude mcp add redmine "redmine-mcp" \
+  -e REDMINE_DOMAIN="https://your-redmine-domain.com" \
+  -e REDMINE_API_KEY="your_api_key_here" \
+  -e REDMINE_MCP_LOG_LEVEL="INFO" \
+  -e REDMINE_MCP_TIMEOUT="30"
+```
+
+### 4. Verify Updated Installation
+
+```bash
+# Test MCP connection
+claude mcp test redmine
+
+# Or test directly
+uv run python -m redmine_mcp.server --help
+```
+
+> **Important Notes:**
+> - Environment variable names have been updated for better project isolation
+> - Now supports both `REDMINE_MCP_LOG_LEVEL` (preferred) and `LOG_LEVEL` (backward compatibility)
+> - Log level handling is now more robust with automatic case conversion and FastMCP compatibility
 
 ## 🛠️ Available MCP Tools
 

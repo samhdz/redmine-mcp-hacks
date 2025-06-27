@@ -7,18 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-06-27
+
 ### Added
-- Parent-child issue relationship management
-- `remove_parent` parameter in `update_issue_content` for removing parent relationships
-- Parent issue information display in `get_issue` output
+- 📋 **Environment Variables Reference Table** - Comprehensive documentation of all configuration options
+- 🔄 **Reinstallation Guide** - Complete step-by-step instructions for updating MCP server
+- 🔧 **Enhanced Log Level Management** - Support for both project-specific and legacy environment variables
+- ⚡ **FastMCP Compatibility** - Automatic case conversion and synchronization with FastMCP log levels
 
 ### Changed
-- Improved parent issue handling logic in Redmine client
-- Enhanced error handling for parent issue operations
+- **Environment Variable Priority System**: 
+  1. `REDMINE_MCP_LOG_LEVEL` (highest priority - project-specific)
+  2. `LOG_LEVEL` (backward compatibility)
+  3. `INFO` (default)
+- **Configuration Loading Order**: Ensure configuration loads before FastMCP initialization
+- **Documentation Structure**: Added dedicated updating section and improved environment variable docs
 
 ### Fixed
-- Correct handling of `parent_issue_id: None` for removing parent relationships
-- Test script paths in README.md documentation
+- **FastMCP Startup Errors**: Resolved case sensitivity issues with log level environment variables
+- **Configuration Race Condition**: Fixed issue where FastMCP read environment variables before they were properly set
+- **Log Level Validation**: Improved error messages for invalid log level values
+
+### Technical Improvements
+- Enhanced config.py with robust log level resolution logic
+- Improved server.py initialization sequence
+- Better error handling and validation
+- Backward compatibility maintained for existing installations
 
 ## [0.2.0] - 2025-06-27
 
@@ -119,6 +133,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** - Bug fixes
 - **Security** - Security-related changes
 
-[Unreleased]: https://github.com/snowild/redmine-mcp/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/snowild/redmine-mcp/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/snowild/redmine-mcp/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/snowild/redmine-mcp/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/snowild/redmine-mcp/releases/tag/v0.1.0

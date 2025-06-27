@@ -22,9 +22,29 @@ class RedmineConfig:
         # 可選配置 - 使用專屬前綴避免與其他專案環境變數衝突
         self.redmine_timeout = int(os.getenv("REDMINE_MCP_TIMEOUT") or os.getenv("REDMINE_TIMEOUT") or "30")
         
-        # 使用專屬環境變數，避免與其他專案衝突
-        self.log_level = os.getenv("REDMINE_MCP_LOG_LEVEL", "INFO").upper()
-        self.debug_mode = self.log_level == "DEBUG"
+        # 日誌級別管理策略：
+        # 1. 優先使用 REDMINE_MCP_LOG_LEVEL（專屬變數）
+        # 2. 其次使用 LOG_LEVEL（向後相容）
+        # 3. 都沒設定時預設為 INFO
+        # 4. FASTMCP_LOG_LEVEL 始終跟隨最終的日誌級別值
+        redmine_log_level = os.getenv("REDMINE_MCP_LOG_LEVEL")
+        if redmine_log_level:
+            self.log_level = redmine_log_level.upper()
+        else:
+            # 向後相容：如果沒有專屬變數，檢查舊的 LOG_LEVEL
+            legacy_log_level = os.getenv("LOG_LEVEL")
+            if legacy_log_level:
+                self.log_level = legacy_log_level.upper()
+            else:
+                self.log_level = "INFO"
+        
+        # FastMCP 日誌級別控制 - 始終設定為與最終日誌級別相同的值
+        # 無論使用者是否有設定 FASTMCP_LOG_LEVEL，都會被覆蓋
+        os.environ["FASTMCP_LOG_LEVEL"] = self.log_level
+        self.fastmcp_log_level = self.log_level
+        
+        self.effective_log_level = self.log_level
+        self.debug_mode = self.effective_log_level == "DEBUG"
         
         self._validate_config()
     
@@ -55,7 +75,7 @@ class RedmineConfig:
         # 驗證 log_level 值
         valid_levels = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
         if self.log_level not in valid_levels:
-            raise ValueError(f"LOG_LEVEL 必須是以下值之一: {', '.join(valid_levels)}")
+            raise ValueError(f"日誌級別必須是以下值之一: {', '.join(valid_levels)}（當前: {self.log_level}）")
     
     @property
     def api_headers(self) -> dict[str, str]:
@@ -67,7 +87,7 @@ class RedmineConfig:
     
     def __repr__(self) -> str:
         """除錯用的字串表示，隱藏敏感資訊"""
-        return f"RedmineConfig(domain='{self.redmine_domain}', timeout={self.redmine_timeout}, log_level='{self.log_level}', debug={self.debug_mode})"
+        return f"RedmineConfig(domain='{self.redmine_domain}', timeout={self.redmine_timeout}, log_level='{self.log_level}', fastmcp_log_level='{self.fastmcp_log_level}', debug={self.debug_mode})"
 
 
 # 全域配置實例

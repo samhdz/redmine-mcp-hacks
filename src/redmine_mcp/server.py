@@ -3,13 +3,17 @@ Redmine MCP 服務器主程式
 提供與 Redmine 系統整合的 MCP 工具
 """
 
+import os
 from typing import Any
 from datetime import datetime
-from mcp.server.fastmcp import FastMCP
 
+# 確保配置在 FastMCP 初始化之前載入
+# 這會處理所有環境變數設定，包含 FASTMCP_LOG_LEVEL
 from .config import get_config
-from .redmine_client import get_client, RedmineAPIError
+config = get_config()
 
+from mcp.server.fastmcp import FastMCP
+from .redmine_client import get_client, RedmineAPIError
 
 # 建立 FastMCP 服務器實例
 mcp = FastMCP("Redmine MCP")

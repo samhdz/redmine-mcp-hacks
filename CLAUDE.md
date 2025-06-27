@@ -73,16 +73,19 @@ claude mcp add redmine "redmine-mcp" \
 
 為避免與其他專案的環境變數衝突，redmine-mcp 使用專屬前綴：
 
-- **專屬變數**：
-  - `REDMINE_MCP_LOG_LEVEL`: 日誌級別 (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-  - `REDMINE_MCP_TIMEOUT`: 請求超時時間（秒）
-
-- **向後相容**（備用）：
-  - `REDMINE_TIMEOUT`: 如果未設定 REDMINE_MCP_TIMEOUT 時使用
-
 - **必要變數**：
   - `REDMINE_DOMAIN`: Redmine 伺服器網址
   - `REDMINE_API_KEY`: Redmine API 金鑰
+
+- **日誌級別控制**：
+  - `REDMINE_MCP_LOG_LEVEL`: 本專案專屬日誌級別（預設：INFO）
+  - `FASTMCP_LOG_LEVEL`: FastMCP 內建變數（可選）
+    - 如果不設定，系統會自動使用 `REDMINE_MCP_LOG_LEVEL` 的值
+    - 設定此變數可單獨控制 FastMCP 的日誌輸出
+
+- **其他配置**：
+  - `REDMINE_MCP_TIMEOUT`: 請求超時時間（秒）
+  - `REDMINE_TIMEOUT`: 向後相容的超時設定
 
 ### 可用的 MCP 工具（22 個）
 - **管理工具**: server_info, health_check, refresh_cache ✨ 新增
