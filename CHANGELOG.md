@@ -1,81 +1,124 @@
-# 變更日誌
+# Changelog
 
-所有對此專案的重要變更都將記錄在此檔案中。
+All notable changes to this project will be documented in this file.
 
-本專案遵循 [語義化版本](https://semver.org/lang/zh-TW/) 規範。
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [未發布]
+## [Unreleased]
 
-### 新增
-- 待發布的新功能
+### Added
+- Parent-child issue relationship management
+- `remove_parent` parameter in `update_issue_content` for removing parent relationships
+- Parent issue information display in `get_issue` output
 
-### 變更
-- 待發布的變更
+### Changed
+- Improved parent issue handling logic in Redmine client
+- Enhanced error handling for parent issue operations
 
-### 修復
-- 待發布的錯誤修復
+### Fixed
+- Correct handling of `parent_issue_id: None` for removing parent relationships
+- Test script paths in README.md documentation
 
-## [0.1.0] - 2024-01-24
+## [0.2.0] - 2025-06-27
 
-### 新增
-- 🎉 首次發布 Redmine MCP Server
-- ✅ 實作完整的 MCP 服務器架構
-- 🔧 提供 14 個核心 MCP 工具
-- 📋 議題管理功能
-  - `get_issue` - 取得議題詳細資訊
-  - `create_new_issue` - 建立新議題
-  - `update_issue_status` - 更新議題狀態
-  - `update_issue_content` - 更新議題內容
-  - `add_issue_note` - 新增議題備註
-  - `assign_issue` - 指派議題
-  - `close_issue` - 關閉議題
-- 🗂️ 專案管理功能
-  - `get_projects` - 取得專案列表
-  - `list_project_issues` - 列出專案議題
-  - `get_issue_statuses` - 取得議題狀態
-- 🔍 搜尋功能
-  - `search_issues` - 搜尋議題
-  - `get_my_issues` - 取得我的議題
-- 🔧 系統工具
-  - `server_info` - 服務器資訊
-  - `health_check` - 健康檢查
-- 🔐 完整的認證和權限管理
-- 🛡️ 資料驗證和錯誤處理機制
-- 🐳 Docker 測試環境支援
-- 🧪 完整的測試套件（100% 測試通過率）
-- 📚 完善的文件和使用說明
-- 🔗 Claude Code 整合支援
+### Added
+- 🎯 **Time Tracking Support** - Record working hours when adding issue notes
+- 🏗️ **Parent-Child Issue Relationships** - Full support for issue hierarchies
+- 🎯 **Name Parameter Support** - Use names instead of IDs for priorities, statuses, trackers
+- 🧠 **Smart Caching System** - Multi-domain cache with automatic refresh
+- 👥 **Enhanced User Management** - Search and manage users by name/login
+- ⚡ **Cache Refresh Tool** - Manual cache refresh with statistics
 
-### 技術實現
-- 使用 FastMCP 框架建立 MCP 服務器
-- 支援 Python 3.12+
-- 使用 uv 作為套件管理器
-- 包含完整的 Redmine REST API 客戶端
-- 支援環境變數配置管理
-- 實作友善的錯誤訊息和中文介面
+### Enhanced Features
+- **Name-based Parameters**: All major tools now support name parameters
+  - Priority names (e.g., "High", "Normal", "Low")
+  - Status names (e.g., "In Progress", "Resolved")
+  - Tracker names (e.g., "Bug", "Feature", "Support")
+  - User names and login names
+- **Time Logging**: `add_issue_note` now supports time tracking
+  - Activity names and IDs
+  - Flexible date specification
+  - Private/public note options
+- **Intelligent Error Messages**: Show available options when invalid names provided
 
-### 文件
-- 📖 README.md - 專案概述和快速開始指南
-- 🚀 INSTALLATION.md - 詳細安裝指南
-- 💡 USAGE_EXAMPLES.md - 實用範例和最佳實務
-- 📋 API_REFERENCE.md - 完整的 API 參考文件
-- 🧪 TESTING.md - 測試指南和說明
+### Technical Improvements
+- Multi-domain cache file support (`~/.redmine_mcp/cache_{domain}_{hash}.json`)
+- 24-hour automatic cache refresh
+- Comprehensive helper functions for ID lookups
+- Enhanced environment variable configuration
 
-### 相容性
-- Redmine 4.0+ (建議 5.0+)
-- Claude Code MCP 整合
-- 跨平台支援 (Windows, macOS, Linux)
+## [0.1.0] - 2025-06-26
+
+### Added
+- 🎉 **Initial Release** of Redmine MCP Server
+- ✅ **Complete MCP Server Architecture** implementation
+- 🔧 **22 Core MCP Tools** for comprehensive Redmine integration
+- 📋 **Issue Management Features**
+  - `get_issue` - Get detailed issue information
+  - `create_new_issue` - Create new issues
+  - `update_issue_status` - Update issue status
+  - `update_issue_content` - Update issue content
+  - `add_issue_note` - Add issue notes
+  - `assign_issue` - Assign/unassign issues
+  - `close_issue` - Close issues
+- 🗂️ **Project Management Features**
+  - `get_projects` - Get project lists
+  - `list_project_issues` - List project issues
+  - `get_issue_statuses` - Get issue statuses
+  - `get_trackers` - Get tracker lists
+  - `get_priorities` - Get priority lists
+  - `get_time_entry_activities` - Get time tracking activities
+  - `get_document_categories` - Get document categories
+- 👥 **User Management Features**
+  - `search_users` - Search users by name/login
+  - `list_users` - List all users
+  - `get_user` - Get user details
+- 🔍 **Search Features**
+  - `search_issues` - Search issues by keywords
+  - `get_my_issues` - Get issues assigned to current user
+- 🔧 **System Tools**
+  - `server_info` - Display server information
+  - `health_check` - Health check and diagnostics
+  - `refresh_cache` - Manual cache refresh
+- 🔐 **Complete Authentication and Permission Management**
+- 🛡️ **Data Validation and Error Handling**
+- 🐳 **Docker Test Environment Support**
+- 🧪 **Comprehensive Test Suite** (100% test coverage)
+- 📚 **Complete Documentation and Usage Guidelines**
+- 🔗 **Claude Code Integration Support**
+
+### Technical Implementation
+- Built with FastMCP framework
+- Python 3.12+ support
+- UV package manager integration
+- Complete Redmine REST API client
+- Environment variable configuration management
+- User-friendly error messages and interface
+
+### Documentation
+- 📖 README.md - Project overview and quick start guide
+- 🚀 Installation and setup instructions
+- 💡 Usage examples and best practices
+- 📋 Complete tool reference
+- 🧪 Testing guides and examples
+
+### Compatibility
+- Redmine 4.0+ (recommended 5.0+)
+- Claude Code MCP integration
+- Cross-platform support (Windows, macOS, Linux)
 
 ---
 
-## 版本規範說明
+## Version Format Guidelines
 
-- **新增 (Added)** - 新功能
-- **變更 (Changed)** - 現有功能的變更
-- **已棄用 (Deprecated)** - 即將移除的功能
-- **已移除 (Removed)** - 已移除的功能
-- **修復 (Fixed)** - 錯誤修復
-- **安全性 (Security)** - 安全性相關的變更
+- **Added** - New features
+- **Changed** - Changes in existing functionality
+- **Deprecated** - Soon-to-be removed features
+- **Removed** - Removed features
+- **Fixed** - Bug fixes
+- **Security** - Security-related changes
 
-[未發布]: https://github.com/your-username/redmine-mcp/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/your-username/redmine-mcp/releases/tag/v0.1.0
+[Unreleased]: https://github.com/snowild/redmine-mcp/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/snowild/redmine-mcp/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/snowild/redmine-mcp/releases/tag/v0.1.0
