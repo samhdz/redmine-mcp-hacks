@@ -139,7 +139,7 @@ claude mcp add redmine "redmine-mcp" \
 uv run python -m redmine_mcp.server
 
 # Test Claude Code integration
-uv run python test_claude_integration.py
+uv run python tests/scripts/claude_integration.py
 ```
 
 ## 🛠️ Available MCP Tools
@@ -217,10 +217,10 @@ Update issue #123 status to "In Progress" with note "Starting to handle this iss
 uv run python -m pytest
 
 # Run MCP integration tests
-uv run python test_mcp_integration.py
+uv run python tests/scripts/mcp_integration.py
 
 # Run Claude Code integration tests  
-uv run python test_claude_integration.py
+uv run python tests/scripts/claude_integration.py
 ```
 
 ### Docker Environment Testing
