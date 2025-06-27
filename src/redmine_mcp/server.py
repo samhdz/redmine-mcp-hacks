@@ -62,6 +62,11 @@ def get_issue(issue_id: int, include_details: bool = True) -> str:
         issue_data = client.get_issue_raw(issue_id, include=include_params)
         
         # 格式化基本議題資訊
+        # 處理父議題資訊
+        parent_info = "無父議題"
+        if 'parent' in issue_data and issue_data['parent']:
+            parent_info = f"#{issue_data['parent']['id']} - {issue_data['parent'].get('subject', 'N/A')}"
+        
         result = f"""議題 #{issue_data['id']}: {issue_data['subject']}
 
 基本資訊:
@@ -71,6 +76,7 @@ def get_issue(issue_id: int, include_details: bool = True) -> str:
 - 優先級: {issue_data['priority'].get('name', 'N/A')}
 - 建立者: {issue_data['author'].get('name', 'N/A')}
 - 指派給: {issue_data.get('assigned_to', {}).get('name', '未指派') if issue_data.get('assigned_to') else '未指派'}
+- 父議題: {parent_info}
 - 完成度: {issue_data.get('done_ratio', 0)}%
 - 開始日期: {issue_data.get('start_date', '未設定')}
 - 完成日期: {issue_data.get('due_date', '未設定')}
@@ -508,7 +514,7 @@ def search_issues(query: str, project_id: int = None, limit: int = 10) -> str:
 def update_issue_content(issue_id: int, subject: str = None, description: str = None, 
                         priority_id: int = None, priority_name: str = None,
                         done_ratio: int = None, tracker_id: int = None, tracker_name: str = None,
-                        parent_issue_id: int = None, start_date: str = None, due_date: str = None,
+                        parent_issue_id: int = None, remove_parent: bool = False, start_date: str = None, due_date: str = None,
                         estimated_hours: float = None) -> str:
     """
     更新議題內容（標題、描述、優先級、完成度、追蹤器、日期、工時等）
@@ -523,6 +529,7 @@ def update_issue_content(issue_id: int, subject: str = None, description: str = 
         tracker_id: 新的追蹤器 ID（與 tracker_name 二選一）
         tracker_name: 新的追蹤器名稱（與 tracker_id 二選一）
         parent_issue_id: 新的父議題 ID（可選）
+        remove_parent: 是否移除父議題關係（可選）
         start_date: 新的開始日期 YYYY-MM-DD 格式（可選）
         due_date: 新的完成日期 YYYY-MM-DD 格式（可選）
         estimated_hours: 新的預估工時（可選）
@@ -571,7 +578,10 @@ def update_issue_content(issue_id: int, subject: str = None, description: str = 
             update_data['tracker_id'] = tracker_id
             changes.append(f"追蹤器 ID: {tracker_id}")
         
-        if parent_issue_id is not None:
+        if remove_parent:
+            update_data['parent_issue_id'] = None
+            changes.append("移除父議題關係")
+        elif parent_issue_id is not None:
             update_data['parent_issue_id'] = parent_issue_id
             changes.append(f"父議題 ID: {parent_issue_id}")
         
@@ -601,7 +611,7 @@ def update_issue_content(issue_id: int, subject: str = None, description: str = 
             update_data['estimated_hours'] = estimated_hours
             changes.append(f"預估工時: {estimated_hours} 小時")
         
-        if not update_data:
+        if not update_data and not changes:
             return "錯誤: 請至少提供一個要更新的欄位"
         
         # 執行更新

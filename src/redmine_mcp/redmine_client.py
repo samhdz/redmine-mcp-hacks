@@ -264,7 +264,11 @@ class RedmineClient:
         if 'tracker_id' in kwargs:
             update_data['issue']['tracker_id'] = kwargs['tracker_id']
         if 'parent_issue_id' in kwargs:
-            update_data['issue']['parent_issue_id'] = kwargs['parent_issue_id']
+            # 如果 parent_issue_id 為 None，則移除父議題關係
+            if kwargs['parent_issue_id'] is None:
+                update_data['issue']['parent_issue_id'] = ""
+            else:
+                update_data['issue']['parent_issue_id'] = kwargs['parent_issue_id']
         if 'start_date' in kwargs:
             update_data['issue']['start_date'] = kwargs['start_date']
         if 'due_date' in kwargs:
