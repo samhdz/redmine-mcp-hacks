@@ -14,6 +14,9 @@ env/
 # Environment variables
 .env
 
+# Claude MCP generated config
+claude_mcp_config_generated.json
+
 # Development tools
 .claude/
 .serena/
