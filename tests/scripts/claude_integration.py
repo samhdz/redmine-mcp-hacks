@@ -95,8 +95,7 @@ def generate_claude_config():
             "redmine": {
                 "command": "redmine-mcp",
                 "env": {
-                    "REDMINE_DOMAIN": os.getenv("REDMINE_DOMAIN", "https://your-redmine-domain.com"),
-                    "REDMINE_API_KEY": os.getenv("REDMINE_API_KEY", "your_api_key_here"),
+                    "REDMINE_DOMAIN": os.getenv("REDMINE_DOMAIN", "https://redmine.com"),
                     "REDMINE_TIMEOUT": os.getenv("REDMINE_TIMEOUT", "30"),
                     "DEBUG_MODE": os.getenv("DEBUG_MODE", "false")
                 }
@@ -141,11 +140,11 @@ def main():
     print("🚀 Claude Code 整合測試開始\n")
     
     tests = [
+        ("配置產生", generate_claude_config),
         ("套件安裝", test_package_installation),
         ("配置設定", test_configuration),
         ("MCP 服務器", test_mcp_server_executable),
         ("工具可用性", test_tools_availability),
-        ("配置產生", generate_claude_config),
     ]
     
     passed = 0
